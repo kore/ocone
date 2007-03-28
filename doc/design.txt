@@ -1,0 +1,108 @@
+=====================
+oCone design document
+=====================
+
+The name
+========
+
+The name oCone derivates from "Open Content Network" and shows the goal of
+oCone to build up a network of free and open available content.
+
+The goal
+========
+
+The worlds evolution mainly bases on information, or content. The internet
+shows a fantastic infrastructure to publish content and make it available for
+everyone in the world, but it has some draw backs.
+
+Content is normally published using HTML (or XHTML) which only describes
+visible formats and does not structure the content in a senseful semantical
+way. Even there are a lot of initiatives to change this it will take some time
+to update / transform all content. There are some persons who say that they are 
+a lot of companies and persons who do not even want their content to be really
+readable.
+
+The infrastructure of the internet is pretty stable but the number of users
+and potential hits on a single website caused by famous news sites requires
+expensive infrastructures to serve those. This is something only big 
+institutions or comapanies can afford.
+
+oCone tries to solve this by building a peer to peer network, where each peer
+can grab content from the web (if allowed), transform it into semantic XML and
+offer it to the other peers. In a network each peer will cache the requested
+contents and will reduce the load on the requested sites this way. With enough
+capacity in the peers caches oCone will even be able to mirror complete
+webpages for use in networks not connected with the internet, or serve content
+for websites which are offline during the request.
+
+Client design
+=============
+
+Transforming content
+--------------------
+
+To grab and transform content from webpages we need a turing complete language
+to transform (X)HTML, PDF, Text and other formats to semantic XML. As a bonus
+the language should have good, build in, capabilities to work with XML.
+
+In theory the client could serve a lot of language bindings for this task, but
+the scripts need to be spread between the clients, so that we should
+concentrate on one tested language. Executing foreign scripts in your personal
+environment may result in security risks if the language is not known for good
+sandboxing of the scripts.
+
+ECMAScripts (some may only know the JavaScript implementations) has proven
+good in all of the above points and there are a lot of open source language
+bindings for ECMAScript interpretors. The default language for transformation
+scripts will be ECMAScript.
+
+Authorizing scripts
+-------------------
+
+When scripts are distributed through a peer to peer network a user has to
+trust the locally executed scripts beyond the sandbox. Users mistrust may be
+caused by political incorrect contents, or scripts abusing the power given by
+a peer to peer network.
+
+To ensure that all users who request contents are also contributing to the
+network, users may only request data from scripts which they allow to be
+executed locally.
+
+A user should be able to have fine grained control over the local scripts, so
+that he should have several options for each script:
+- Allow execution
+- Allow caching of aggregated contents
+- Allow forwarding of requests
+
+Not every user wants to perform such fine grained control over possible
+scripts, so that there should be common lists of "good" scripts to help users
+configuring their clients.
+
+Content caching
+---------------
+
+Caching of requested content is viable for the network to work. If contents
+would not be cached a grown network could cause DOS attacks on bad performing
+websites.
+
+Each client has a configured amount of diskspace available for cached content.
+A script defines the cache strategies for content, which may be combination of
+time to live and directives to handle the content if the website is not
+reachable any more. If the the size of the cached content is bigger then the
+configured cache size old content will be purged.
+
+On an request the client itself will check if he has the content available. If
+this is not the case the client will start a breadth-first search on all known
+peers with a limited depth. If the depth limit is reached and no cached
+content could be found the client will rerequest the content from teh website
+and update its cache. He may notify the previously contacted peers that he has
+the requested content available.
+
+The protocol
+============
+
+Peer to peer protocol
+---------------------
+
+Client protocol
+---------------
