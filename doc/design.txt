@@ -106,3 +106,31 @@ Peer to peer protocol
 
 Client protocol
 ---------------
+
+Technical problems / Open questions
+===================================
+
+NAT & Firewalls
+---------------
+
+Using IPv4, NAT is a quite usual setup for a lot of clients. NAT without
+forwarding the right ports to the IP the client runs on, or firewall rules
+declining the access to the port, prevent the client to be contacted from the
+net. Ho do we deal with clients which can access other clients, but are not 
+accessible from the web?
+
+One slution could be to establish permanent connections with a decent amount
+of known peers and only communicate over those established connections. The
+addresses of those impaired clients should not be forwarded to other peers,
+because only the impaired client itself can establish connections.
+
+Script distribution & script versioning
+---------------------------------------
+
+We need to share scripts through the peer to peer network with user
+notification to authorize new scripts, or new script versions. On the other
+hand we want to provide script white lists to make it easier for user to allow
+groups of well known scripts to be executed in his local environment. Those
+script lists could include the scripts, so that they should not need to be
+shared through the network, but are directly included.
+
