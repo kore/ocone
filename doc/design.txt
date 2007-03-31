@@ -134,3 +134,61 @@ groups of well known scripts to be executed in his local environment. Those
 script lists could include the scripts, so that they should not need to be
 shared through the network, but are directly included.
 
+Evil clients
+------------
+
+Since the protocol is documented and the (default) client will be open source
+it is easy to write your own client using the protocol and try abusing the 
+network. This sections should list possible attacks and strategies to act 
+against them.
+
+As no client needs to authentificate there is no way to identify a client.
+Everything, like version string, signed messages, etc. could be faked by just
+copying those parts from the official client.
+
+1. Injecting spam, or other broken content
+
+   A client could pretend to have content cached and serve completely
+   different content instead. This could either be spam, or just plain wrong
+   content. This only affects cached contents, because othwerwise the client
+   will fetch the data itself.
+   
+   This problem couzld be resolved by comparing the return of multiple clients
+   by multiple hashs of the content and use the results with the most hits.
+   This could of course also be manipulated, but should be nearly impossible
+   in big networks, and can be combined with IP / Client blacklist distributed
+   by common servers.
+
+   Without an authorized client it is impossible to really verify a script
+   response as correct.
+
+2. Serving malicious scripts
+   
+   Malicious scripts can be detected by storing several hash sums for the
+   script in the whitelist and comparing the script against those hashes.
+
+3. Exceeding clients memory with too many requests
+
+   Each client has a queue with the requests by other clients he wants to
+   serve. This queue could be exceeded and consume a lot of open connections
+   and memory by high amounts of requests. If the queue of a client exceeds a
+   certain limit the client could response with messages indicating that it is
+   currectly unavailable for more requests.
+
+   To prevent from clients always sending service unavailable messages, the
+   other clients could store ratings for their peers, and send requests to
+   those clients more seldom and schedule their requests with a lower
+   priority. This should also help balancing the requests in the network.
+
+4. Only requesting, but no caching / fetching / forwarding
+   
+   The default client will ensure, that the user can only request contents
+   from scripts he offers caching, fetching and forwarding for. A custom
+   client could of course bypass this.
+
+   The only way to detect such misbehaviour is gathering statistics for every
+   known peer and reduce the clients schedule priority on bad behaviour. There
+   is no way to proof detect some clients misbehaviour. In a big enough
+   network the count of those misshapen clients should always be low enough to
+   be safely ignored.
+
