@@ -98,6 +98,49 @@ content could be found the client will rerequest the content from the website
 and update its cache. He may notify the previously contacted peers that he has
 the requested content available.
 
+Communication
+-------------
+
+The client should be able to run as a deamon with no user interaction to
+optimally perform on servers and can be up 24/7. Optionally it should be
+possible to configure the client using a webinterface or a normal GUI. To
+reach this goal we get three levels of communication:
+
+.. image:: connections.svg
+   :alt:   oCone communication structure
+
+1. Peer to peer communication
+
+   This communication level describes the interaction of different oCone
+   clients for interchaning data, sending cache requests and sharing scripts.
+   The protocol itself is described in the section `Peer to peer protocol`__.
+
+2. GUI communication
+
+   The GUI needs access to the oCone clients / deamons data to display the
+   clients status and to configure the client.
+
+   Presumeably we do not need to describe another network protocol here but
+   can interact using a local command line interface. The output of the CLI
+   programs need of course be parseable (perhaps optionally XML) and offer
+   access to all features of the deamon.
+
+3. Deamon <-> client communication
+
+   The clients are not oCone clients in this diagram, but random programs
+   using the oCone network and caching abilities to request content.
+
+   Example for this use case:
+
+   A user wants to use his browser request wikipedia contents using the oCone 
+   network. He enters a URL like ocone://en.wikipedia/oCone in the URL bar of
+   his browser. The browser now contacts the local oCone deamon which checks
+   his cache for the requested information and forwards the requests to other
+   peers in the network if the data was not locally available. In the meantime
+   the administrator of the oCone deamon could watch the status of the request
+   using the GUI, or CLI tools. If the browser gets the resulting XML he could
+   display it using a defined set of XSLT and CSS, or just print the raw XML.
+
 The protocol
 ============
 
