@@ -86,15 +86,15 @@ would not be cached a grown network could cause DOS attacks on bad performing
 websites.
 
 Each client has a configured amount of diskspace available for cached content.
-A script defines the cache strategies for content, which may be combination of
-time to live and directives to handle the content if the website is not
+A script defines the cache strategies for content, which may be a combination 
+of time to live and directives to handle the content if the website is not
 reachable any more. If the the size of the cached content is bigger then the
 configured cache size old content will be purged.
 
 On an request the client itself will check if he has the content available. If
 this is not the case the client will start a breadth-first search on all known
 peers with a limited depth. If the depth limit is reached and no cached
-content could be found the client will rerequest the content from teh website
+content could be found the client will rerequest the content from the website
 and update its cache. He may notify the previously contacted peers that he has
 the requested content available.
 
@@ -106,6 +106,15 @@ Peer to peer protocol
 
 Client protocol
 ---------------
+
+Caching strategy
+================
+
+Cache options
+-------------
+
+Cache purging / overwriting algorithm
+-------------------------------------
 
 Technical problems / Open questions
 ===================================
