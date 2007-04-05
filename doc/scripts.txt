@@ -1,0 +1,43 @@
+===========================
+oCone script specifications
+===========================
+
+The scripts
+===========
+
+Scripts are used to fetch textual content from websites or other locations and
+generate XML documents from them.
+
+Definition document
+===================
+
+Scripts should deliver a definition document specifying the structure of the
+generated content. For the XML specification you could either use XSD, DTD or
+RelaxNG. The definition will be used as the namespace for all child elements
+of the content node.
+
+Naming scheme
+=============
+
+The scripts need unique names to be uniquely identified in the network. To
+enable structuring the scripts in the UI we choose a USENet like naming
+scheme. The topmost defines the type of content, followed by meaningful names.
+The grammar for names:
+
+NAME = TYPE '.' MULTIPLE
+MULTIPLE = ( SINGLE | SINGLE '.' MULTIPLE )
+TYPE = ( org | com | gov | ? )
+SINGLE = [a-z]+
+
+Example: org.wikipedia.article
+
+Script context
+==============
+
+In the scripts we need access to DOM operations on the XML file to generate
+and different parsing libraries to transform the fetched content.
+
+As the initial structure the script will receive its parameters and a basic
+XML document with a filled header and an empty content element. The purpose is
+of course filling the content node or bailing out with an error.
+
