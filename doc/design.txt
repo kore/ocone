@@ -159,11 +159,22 @@ to enforce the deamon to run as root. The default port the HTTP server will
 run on is port 8023 (yet unassigned), but this should of course be 
 configurable.
 
-The client should understand URL of the following scheme:
+The client should understand URLs of the ocone:// scheme, with some special 
+meanings for the URL parts:
 
-	ocone://server[:port]/script[/parameter[...]]
+ - Server, plus optional port
+   
+   Defines the host and port to connect to the ocone deamon.
 
-This very simplified grammar follows for its elements the URI stadard.
+ - Path
+  
+   The path uniquely identifies the script as proposed in the scripts
+   document.
+
+ - Parameters
+
+   The parameters are a list of optional parameters given for the script
+   defining what exactly should be fetched, etc.
 
 The "server" specifies the hostname or IP the ocone deamon runs on, and the
 the "port" defaults to the above mentioned 8023, but can be overwritten. The
