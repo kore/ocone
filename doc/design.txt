@@ -258,6 +258,21 @@ groups of well known scripts to be executed in his local environment. Those
 script lists could include the scripts, so that they should not need to be
 shared through the network, but are directly included.
 
+Binary content
+--------------
+
+oCone is designed to transform and transfer content described using XML and
+no binary content. Binary content can always be embedded in XML using PC-Data
+sections or data:// URLs. Embedding binary content will increase the required
+cache sizes and use far more bandwidth and could hardly be described using a
+markup language.
+
+- Should we allow data URLs? 
+- If not, what will we do with the large available structered sets of binary 
+  data like http://commons.wikimedia.org? Those are sometimes relevant 
+  contents in wikipedia articles and should somehow be included in displayed
+  articles.
+
 Evil clients
 ------------
 
@@ -315,4 +330,37 @@ copying those parts from the official client.
    is no way to proof detect some clients misbehaviour. In a big enough
    network the count of those misshapen clients should always be low enough to
    be safely ignored.
+
+End user usage
+==============
+
+For most end users XML is not readable by default and needs to be transformed
+into a visually enhanced document description language like XHTML using CSS,
+or PDF. The ocone deamon itself will not deliver such formats, because its
+basic usage is to transform, cache and deliver semantic XML, so that the
+output transformation should be done in the clients. A useful language for
+this could be XSLT, because it could be interpreted by most browsers and has
+bindings for nearly each language.
+
+Browser extension
+-----------------
+
+The browsers of the Mozilla Foundation (Firefox, Mozilla) are XUL based and
+allow easy extension of their core functionality by XUL based browser plugins.
+It should be pretty easy to write an extension handling ocone:// URLs and use
+a set of predefined or fetched XSLTs to display them in the browser window.
+
+Standalone client
+-----------------
+
+Using the mozilla XUL runner we could create a OS independent standalone
+client reusing the above mentioned browser extension with full support for
+browsing oCone.
+
+PHP libraries
+-------------
+
+As an example for other language an implementation of a client in PHP should
+be very simple and would make the data fetched by oCone deamons reusable in 
+web applications.
 
