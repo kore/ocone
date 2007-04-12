@@ -8,9 +8,9 @@ The issue
 The software itself will of course not be illegal, by using only open source
 libraries and ensuring clean IP of the code. But some local authorities
 consider software only (or mostly) used for illegal actions as illegal. It
-will be simple to violate copyright laws using oCone clients, offering website
-content without authorization of the copyright owner. By the design of oCone
-it will be impossible to ban such requests.
+will be simple to violate copyright laws using oCone clients by offering 
+website content without authorization of the copyright owner. By the design of
+oCone it will be impossible to ban such requests.
 
 Legal use
 =========
@@ -33,8 +33,8 @@ the copyright in a special country.
 
 oCone will offer whitelist of scripts which tries to respect a reasonable set 
 of common copyright laws. oCone can not prevent users from loading other
-whitelist distributed over random channels in the internet containing scripts
+whitelistis distributed over random channels in the internet containing scripts
 violating copyright laws. Defined filters could easily be modified in an open
-source sofware, so that it would make no sense to implement the in the first
+source sofware, so that it would make no sense to implement them in the first
 place.
 
