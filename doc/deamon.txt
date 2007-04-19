@@ -1,0 +1,46 @@
+======================
+Design of oCone deamon
+======================
+
+Main threads
+============
+
+The main process off the oCone deamon contains several logic threads managing 
+parts of the software.
+
+- Executing scripts to fetch and transform data
+- Answering cache requests for peers
+- Requesting cache content from peers
+- Answering client requests
+- GUI communication
+
+Interthread communication
+=========================
+
+For the interthread communication and synchronization we need several
+datastructures containing the open requests.
+
+- Scripts to execute
+  - Notification on finished script to client thread
+- Cache requests
+  - Notification to peer request thread
+  - Notification to client request thread
+
+Datastructures in threads
+=========================
+
+- Peer list
+  - Address
+  - Statistics
+  - Priority
+
+- Cache
+  - Script reference
+  - File
+
+- Script tree
+  - Cached
+  - Last request from
+
+- Configuration
+  ...
