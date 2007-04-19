@@ -35,7 +35,25 @@ capacity in the peers caches oCone will even be able to mirror complete
 webpages for use in networks not connected with the internet, or serve content
 for websites which are offline during the request.
 
-Client design
+Used terms
+==========
+
+Deamon
+
+  A deamon is a peer in the oCone network normally running in background for a
+  user.
+
+Peer
+
+  Other name for the deamons in the network used when it comes to aspects of
+  the peer to peer communication mechanism.
+
+Client
+
+  A client is a application connecting to a ocone deamon / peer requesting
+  data from the network.
+
+Deamon design
 =============
 
 Transforming content
@@ -45,8 +63,8 @@ To grab and transform content from webpages we need a turing complete language
 to transform (X)HTML, PDF, Text and other formats to semantic XML. As a bonus
 the language should have good, build in, capabilities to work with XML.
 
-In theory the client could serve a lot of language bindings for this task, but
-the scripts need to be spread between the clients, so that we should
+In theory the deamon could serve a lot of language bindings for this task, but
+the scripts need to be spread between the peers, so that we should
 concentrate on one tested language. Executing foreign scripts in your personal
 environment may result in security risks if the language is not known for good
 sandboxing of the scripts.
@@ -76,7 +94,7 @@ that he should have several options for each script:
 
 Not every user wants to perform such fine grained control over possible
 scripts, so that there should be common lists of "good" scripts to help users
-configuring their clients.
+configuring their deamon.
 
 Content caching
 ---------------
@@ -85,26 +103,26 @@ Caching of requested content is viable for the network to work. If contents
 would not be cached a grown network could cause DOS attacks on bad performing
 websites.
 
-Each client has a configured amount of diskspace available for cached content.
+Each deamon has a configured amount of diskspace available for cached content.
 A script defines the cache strategies for content, which may be a combination 
 of time to live and directives to handle the content if the website is not
 reachable any more. If the the size of the cached content is bigger then the
 configured cache size old content will be purged.
 
-On an request the client itself will check if he has the content available. If
-this is not the case the client will start a breadth-first search on all known
+On an request the deamon itself will check if he has the content available. If
+this is not the case the deamon will start a breadth-first search on all known
 peers with a limited depth. If the depth limit is reached and no cached
-content could be found the client will rerequest the content from the website
+content could be found the deamon will rerequest the content from the website
 and update its cache. He may notify the previously contacted peers that he has
 the requested content available.
 
 Communication
 -------------
 
-The client should be able to run as a deamon with no user interaction to
-optimally perform on servers and can be up 24/7. Optionally it should be
-possible to configure the client using a webinterface or a normal GUI. To
-reach this goal we get three levels of communication:
+The deamon should be able to run as a background process with no user 
+interaction to optimally perform on servers and can be up 24/7. Optionally it 
+should be possible to configure the deamon using a webinterface or a normal 
+GUI. To reach this goal we get three levels of communication:
 
 .. image:: connections.svg
    :alt:   oCone communication structure
@@ -112,13 +130,13 @@ reach this goal we get three levels of communication:
 1. Peer to peer communication
 
    This communication level describes the interaction of different oCone
-   clients for interchaning data, sending cache requests and sharing scripts.
+   peers for interchaning data, sending cache requests and sharing scripts.
    The protocol itself is described in the section `Peer to peer protocol`__.
 
 2. GUI communication
 
-   The GUI needs access to the oCone clients / deamons data to display the
-   clients status and to configure the client.
+   The GUI needs access to the oCone deamons data to display the clients 
+   status and to configure the deamon.
 
    Presumeably we do not need to describe another network protocol here but
    can interact using a local command line interface. The output of the CLI
@@ -127,7 +145,7 @@ reach this goal we get three levels of communication:
 
 3. Deamon <-> client communication
 
-   The clients are not oCone clients in this diagram, but random programs
+   The clients are not oCone deamon in this diagram, but random programs
    using the oCone network and caching abilities to request content.
 
    Example for this use case:
@@ -237,16 +255,16 @@ Technical problems / Open questions
 NAT & Firewalls
 ---------------
 
-Using IPv4, NAT is a quite usual setup for a lot of clients. NAT without
-forwarding the right ports to the IP the client runs on, or firewall rules
-declining the access to the port, prevent the client to be contacted from the
-net. Ho do we deal with clients which can access other clients, but are not 
+Using IPv4, NAT is a quite usual setup for a lot of deamons. NAT without
+forwarding the right ports to the IP the deamon runs on, or firewall rules
+declining the access to the port, prevent the deamon to be contacted from the
+net. Ho do we deal with peers which can access other peers, but are not 
 accessible from the web?
 
 One slution could be to establish permanent connections with a decent amount
 of known peers and only communicate over those established connections. The
-addresses of those impaired clients should not be forwarded to other peers,
-because only the impaired client itself can establish connections.
+addresses of those impaired peers should not be forwarded to other peers,
+because only the impaired peer itself can establish connections.
 
 Script distribution & script versioning
 ---------------------------------------
@@ -273,32 +291,49 @@ markup language.
   contents in wikipedia articles and should somehow be included in displayed
   articles.
 
-Evil clients
+Initial connection points
+-------------------------
+
+When setting up a new deamon for the oCone network the deamon need to know an
+initial set of running peers to be able to receive more peer addresses. We
+need methods of distributnged peer addresses to build up a complete network and
+integrate new clients. There shouldn't be a single point of failure, and this
+way no single peer repository or single initial peer to connect.
+
+- Do we want to let the clients report their address to simple servers and
+  distribute lists of those peer addresss repositories with the client?
+- Do we just want to distribute a list of some "always" running oCone peers
+  and only ensure peer address distribution using the oCone network?
+
+The list should of course be customizeable to allow builing private oCone
+networks.
+
+Evil deamons
 ------------
 
-Since the protocol is documented and the (default) client will be open source
-it is easy to write your own client using the protocol and try abusing the 
+Since the protocol is documented and the (default) deamon will be open source
+it is easy to write your own deamon using the protocol and try abusing the 
 network. This sections should list possible attacks and strategies to act 
 against them.
 
-As no client needs to authentificate there is no way to identify a client.
+As no deamon needs to authentificate there is no way to identify a deamon.
 Everything, like version string, signed messages, etc. could be faked by just
-copying those parts from the official client.
+copying those parts from the official deamon.
 
 1. Injecting spam, or other broken content
 
-   A client could pretend to have content cached and serve completely
+   A peer could pretend to have content cached and serve completely
    different content instead. This could either be spam, or just plain wrong
-   content. This only affects cached contents, because othwerwise the client
+   content. This only affects cached contents, because othwerwise the peer
    will fetch the data itself.
    
-   This problem couzld be resolved by comparing the return of multiple clients
+   This problem couzld be resolved by comparing the return of multiple peers
    by multiple hashs of the content and use the results with the most hits.
    This could of course also be manipulated, but should be nearly impossible
    in big networks, and can be combined with IP / Client blacklist distributed
    by common servers.
 
-   Without an authorized client it is impossible to really verify a script
+   Without an authorized peer it is impossible to really verify a script
    response as correct.
 
 2. Serving malicious scripts
@@ -306,29 +341,29 @@ copying those parts from the official client.
    Malicious scripts can be detected by storing several hash sums for the
    script in the whitelist and comparing the script against those hashes.
 
-3. Exceeding clients memory with too many requests
+3. Exceeding peers memory with too many requests
 
-   Each client has a queue with the requests by other clients he wants to
+   Each peer has a queue with the requests by other peers he wants to
    serve. This queue could be exceeded and consume a lot of open connections
-   and memory by high amounts of requests. If the queue of a client exceeds a
-   certain limit the client could response with messages indicating that it is
+   and memory by high amounts of requests. If the queue of a peer exceeds a
+   certain limit the peer could response with messages indicating that it is
    currectly unavailable for more requests.
 
-   To prevent from clients always sending service unavailable messages, the
-   other clients could store ratings for their peers, and send requests to
-   those clients more seldom and schedule their requests with a lower
+   To prevent from peers always sending service unavailable messages, the
+   other peers could store ratings for their peers, and send requests to
+   those peers more seldom and schedule their requests with a lower
    priority. This should also help balancing the requests in the network.
 
 4. Only requesting, but no caching / fetching / forwarding
    
-   The default client will ensure, that the user can only request contents
+   The default deamon will ensure, that the user can only request contents
    from scripts he offers caching, fetching and forwarding for. A custom
-   client could of course bypass this.
+   deamon could of course bypass this.
 
    The only way to detect such misbehaviour is gathering statistics for every
-   known peer and reduce the clients schedule priority on bad behaviour. There
-   is no way to proof detect some clients misbehaviour. In a big enough
-   network the count of those misshapen clients should always be low enough to
+   known peer and reduce the peers schedule priority on bad behaviour. There
+   is no way to proof detect some peers misbehaviour. In a big enough
+   network the count of those misshapen peers should always be low enough to
    be safely ignored.
 
 End user usage
