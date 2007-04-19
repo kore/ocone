@@ -39,17 +39,14 @@ Used terms
 ==========
 
 Deamon
-
   A deamon is a peer in the oCone network normally running in background for a
   user.
 
 Peer
-
   Other name for the deamons in the network used when it comes to aspects of
   the peer to peer communication mechanism.
 
 Client
-
   A client is a application connecting to a ocone deamon / peer requesting
   data from the network.
 
@@ -290,6 +287,11 @@ markup language.
   data like http://commons.wikimedia.org? Those are sometimes relevant 
   contents in wikipedia articles and should somehow be included in displayed
   articles.
+
+Conclusion:
+- We allow data URLs but ask the user to use them as seldom as possible. It
+  would be a major drawback and impossible to block reliably binary content
+  with valid information in articles.
 
 Initial connection points
 -------------------------
