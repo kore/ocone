@@ -89,7 +89,7 @@
 		</div>
 
 		<h6>
-			CC by <a href="http://kore-nordmann.de">Kore Nordmann</a>
+			Last updated to revision <?php echo $svn->revision; ?> at <?php echo date( 'r', $svn->date ); ?> by <?php echo $svn->author; ?> at ocone.org.
 		</h6>
 	</div>
 </body>

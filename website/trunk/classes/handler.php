@@ -1,5 +1,7 @@
 <?php
 
+require_once 'svn.php';
+
 abstract class oCone_Handler
 {
     /**
@@ -48,15 +50,26 @@ abstract class oCone_Handler
         $iterator = new RecursiveRegexIterator(
             new RecursiveDirectoryIterator( 
                 dirname( __FILE__ ) . '/../' .
-                    oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'content' ),
-                RecursiveDirectoryIterator::CURRENT_AS_SELF
+                    oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'content' )
             ),
-            '/\\/[^.][^\\/]*$/',
+            '(^/?(?:\\.\\.?/|[^.][^/]*/)*[^.][^/]*$)',
             RegexIterator::MATCH,
             RegexIterator::USE_KEY
         );
 
         return $this->navigationIteratorToArray( $iterator );
+    }
+
+    /**
+     * Converts a filename to a menu title
+     * 
+     * @param string $file 
+     * @return string
+     */
+    protected function getNameFromFile( $file )
+    {
+        $info = pathinfo( $file );
+        return ucfirst( $info['filename'] );
     }
 
     /**
@@ -72,15 +85,15 @@ abstract class oCone_Handler
 
         foreach ( $navigation as $path => $item )
         {
-            $info = pathinfo( $path );
+            $name = $this->getNameFromFile( $path );
 
-            $name = ucfirst( $info ['filename'] );
+            $info = pathinfo( $path );
             $array[$name]['link'] = $directory . $info['filename'] . '.html';
     
             // Iterate over children
-            if ( $item->hasChildren() )
+            if ( $navigation->hasChildren() )
             {
-                $array[$name]['childs'] = $this->navigationIteratorToArray( $item->getChildren(), $directory . $info['filename'] . '/' );
+                $array[$name]['childs'] = $this->navigationIteratorToArray( $navigation->getChildren(), $directory . $info['filename'] . '/' );
             }
         }
 
@@ -99,6 +112,7 @@ abstract class oCone_Handler
         $url = $this->originalUri;
         $site = oCone_Dispatcher::$configuration->getSettings( 'site', 'general', array( 'author', 'title' ) );
         $navigation = $this->getNavigation();
+        $svn = new oCone_svnInfo( $this->uri );
 
         ob_start();
         include dirname( __FILE__ ) . '/../templates/main.php';
@@ -109,7 +123,11 @@ abstract class oCone_Handler
         {
             $cacheFile = dirname( __FILE__ ) . '/../htdocs' . $this->originalUri;
 
-            @mkdir( dirname( $cacheFile ), 0755, true );
+            if ( !is_dir( dirname( $cacheFile ) ) )
+            {
+                mkdir( dirname( $cacheFile ), 0777, true );
+            }
+
             file_put_contents(
                 $cacheFile,
                 $output
@@ -126,3 +144,4 @@ abstract class oCone_Handler
      */
     abstract public function handle();
 }
+

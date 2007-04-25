@@ -1,6 +1,6 @@
 <?php
 
-define( 'OCONE_CACHE', true );
+define( 'OCONE_CACHE', false );
 
 set_include_path( dirname( __FILE__ ) . '/../classes' );
 require_once 'dispatcher.php';

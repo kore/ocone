@@ -36,14 +36,15 @@ class oCone_RstHandler extends oCone_Handler
     }
 
     /**
-     * Handle request 
+     * Converts a rst document to html and returns the html markup.
      * 
-     * @return void
+     * @param string $rstFile 
+     * @return string
      */
-    public function handle()
+    public static function rst2Html( $rstFile )
     {
         // Call rst to html converter from docutils
-        $html = shell_exec( 'rst2html.py -q --compact-field-lists --link-stylesheet --initial-header-level=2 --no-doc-title ' . escapeshellarg( $this->uri ) );
+        $html = shell_exec( 'rst2html.py -q --compact-field-lists --link-stylesheet --initial-header-level=2 --no-doc-title ' . escapeshellarg( $rstFile ) );
 
         // We only need the stuff between the body tags
         $html = preg_replace( '(^.*<body[^>]*>(.*)</body>.*$)ims', '\\1', $html );
@@ -53,8 +54,17 @@ class oCone_RstHandler extends oCone_Handler
         // Hint: Only the \s matches line breaks
         $html = preg_replace( '(.*topic-title.*\s*<ul class="simple">)i', '<ul class="toc">', $html );
 
-        // Display stuff
-        $this->displayContent( $html );
+        return $html;
+    }
+
+    /**
+     * Handle request 
+     * 
+     * @return void
+     */
+    public function handle()
+    {
+        $this->displayContent( self::rst2html( $this->uri ) );
     }
 }
 
