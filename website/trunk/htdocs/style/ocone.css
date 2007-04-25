@@ -90,6 +90,25 @@ div#misc {
 	float: left;
 }
 
+ul.toc {
+	margin: 5px;
+	padding: 2px;
+	float: right;
+	border: solid 1px #D3D7CF;
+	list-style-type: none
+}
+
+ul.toc ul {
+	margin: 0px 0px 0px 10px;
+	padding: 0px;
+	list-style-type: none
+}
+
+ul.toc li {
+	padding: 1px;
+	margin: 0px;
+}
+
 /* Sub navigation */
 
 ul#subnavigation {
