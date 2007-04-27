@@ -43,6 +43,33 @@ h6 {
 	color: #888A85;
 }
 
+hr {
+	border: 1px solid #D3D7CF;
+	height: 1px;
+	margin: 5px;
+}
+
+/* Forms */
+
+form {
+	display: inline;
+}
+
+label {
+	display: block;
+	clear: right;
+}
+
+label * {
+	float: right;
+	width: 400px;
+	border: 1px solid #D3D7CF;
+
+	color: #2e3436;
+	font-family: serif;
+	font-size: 10px;
+}
+
 /* Navigation */
 
 ul#navigation {
@@ -165,5 +192,28 @@ div.download h3 {
 div.download a {
 	font-size: 11px;
 	margin: 10px 0px 5px 0px;
+}
+
+/* Blog */
+
+ul.comments {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+ul.comments li {
+	margin: 2px 2px 2px 20px;
+}
+
+ul.comments li h3 {
+	margin: 0px;
+	color: #88858A;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+ul.comments li p {
+	margin: 2px 0px 15px 0px;
 }
 

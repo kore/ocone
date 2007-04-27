@@ -49,8 +49,7 @@ abstract class oCone_Handler
     {
         $iterator = new RecursiveRegexIterator(
             new RecursiveDirectoryIterator( 
-                dirname( __FILE__ ) . '/../' .
-                    oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'content' )
+                OCONE_CONTENT
             ),
             '(^/?(?:\\.\\.?/|[^.][^/]*/)*[^.][^/]*$)',
             RegexIterator::MATCH,
@@ -115,13 +114,13 @@ abstract class oCone_Handler
         $svn = new oCone_svnInfo( $this->uri );
 
         ob_start();
-        include dirname( __FILE__ ) . '/../templates/main.php';
+        include OCONE_BASE . 'templates/main.php';
         $output = ob_get_clean();
 
         // Write cache item
         if ( $static && OCONE_CACHE )
         {
-            $cacheFile = dirname( __FILE__ ) . '/../htdocs' . $this->originalUri;
+            $cacheFile = OCONE_BASE . 'htdocs' . $this->originalUri;
 
             if ( !is_dir( dirname( $cacheFile ) ) )
             {
@@ -135,6 +134,21 @@ abstract class oCone_Handler
         }
 
         echo $output;
+    }
+
+    /**
+     * Remove cache file
+     * 
+     * @param string $url 
+     * @return void
+     */
+    protected function clearCache( $url )
+    {
+        $cacheFile = OCONE_BASE . 'htdocs' . $url;
+        if ( is_file( $cacheFile ) )
+        {
+            unlink( $cacheFile );
+        }
     }
 
     /**

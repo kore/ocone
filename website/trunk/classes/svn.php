@@ -52,11 +52,11 @@ class oCone_svnInfo
         switch( $property )
         {
             case 'author':
-                return (string) $this->info->entry->commit->author;
+                return (string) @$this->info->entry->commit->author;
             case 'revision':
-                return (int) (string) $this->info->entry->commit['revision'];
+                return (int) (string) @$this->info->entry->commit['revision'];
             case 'date':
-                return (int) strtotime( (string) $this->info->entry->commit->date );
+                return (int) strtotime( (string) @$this->info->entry->commit->date );
         }
     }
 }

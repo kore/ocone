@@ -33,7 +33,7 @@ class oCone_Dispatcher
         self::$configuration = ezcConfigurationManager::getInstance();
         self::$configuration->init( 
             'ezcConfigurationIniReader', 
-            dirname(  __FILE__ ) . '/../config'
+            OCONE_BASE . 'config/'
         );
     }
 
@@ -75,8 +75,8 @@ class oCone_Dispatcher
 
         // Content directory to work on
         define( 'OCONE_CONTENT',
-            dirname( __FILE__ ) . '/../' .
-            oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'content' )
+            OCONE_BASE .
+                oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'content' )
         );
 
         // Let the handler do everything else...

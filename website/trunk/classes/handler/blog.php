@@ -2,6 +2,8 @@
 
 require_once 'handler.php';
 
+require_once 'handler/blog/entry.php';
+
 class oCone_BlogHandler extends oCone_Handler
 {
     protected $pages;
@@ -9,6 +11,8 @@ class oCone_BlogHandler extends oCone_Handler
     protected $offset = 0;
 
     protected $limit;
+
+    protected $action;
 
     public function __construct( $uri )
     {
@@ -53,11 +57,28 @@ class oCone_BlogHandler extends oCone_Handler
         }
 
         // Check for single blog entries
+        $uri = $pathinfo['dirname'] . '/.' . $pathinfo['filename'];
+        $fullPath = OCONE_CONTENT . '/' . $uri;
+
         $extensions = array( 'txt', 'rst' );
         foreach ( $extensions as $extension )
         {
             if ( $path = realpath( $fullPath . '.' . $extension ) )
             {
+                return $path;
+            }
+        }
+
+        // Check for blog entry actions
+        $fullPath = OCONE_CONTENT . '/' . dirname( $pathinfo['dirname'] ) . '/.' . basename( $pathinfo['dirname'] );
+        $this->action = $pathinfo['filename'];
+
+        $extensions = array( 'txt', 'rst' );
+        foreach ( $extensions as $extension )
+        {
+            if ( $path = realpath( $fullPath . '.' . $extension ) )
+            {
+                $this->originalUri = dirname( $this->originalUri ) . '.html';
                 return $path;
             }
         }
@@ -77,24 +98,22 @@ class oCone_BlogHandler extends oCone_Handler
      */
     protected function showIndexPage()
     {
-        $html = '';
+        $content = '';
         $entry = 0;
 
+        $baseUrl = str_replace( '.html', '/', $this->originalUri );
+
+        $offset = $this->offset;
         foreach ( $this->pages as $page )
         {
-            if ( $this->offset > 0 )
+            if ( $offset > 0 )
             {
-                $this->offset--;
+                $offset--;
                 continue;
             }
 
-            $pageHtml = oCone_RstHandler::rst2html( $page ) . "\n<hr />\n";
-
-            $info = pathinfo( $page );
-            $url = str_replace( '.html', '/' . $info['filename'] . '.html', $this->originalUri );
-            $pageHtml = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $pageHtml );
-
-            $html .= $pageHtml;
+            $blogEntry = new oCone_BlogEntry( $page, $baseUrl );
+            $content .= $blogEntry->getReducedEntry();
 
             if ( ++$entry >= $this->limit )
             {
@@ -102,18 +121,35 @@ class oCone_BlogHandler extends oCone_Handler
             }
         }
 
-        // @TODO: Add paging footer to html
+        $offset = $this->offset;
+        $limit = $this->limit;
 
-        $this->displayContent( $html );
+        ob_start();
+        include OCONE_BASE . 'templates/blog/list.php';
+
+        $this->displayContent( ob_get_clean() );
     }
 
+    /**
+     * Show full view of a single blog entry
+     * 
+     * @return void
+     */
     protected function showBlogEntry()
     {
-        $html = oCone_RstHandler::rst2html( $this->uri );
+        $baseUrl = str_replace( '.html', '/', $this->originalUri );
 
-        // @TODO: Add comment form
+        $blogEntry = new oCone_BlogEntry( $this->uri, $baseUrl );
 
-        $this->displayContent( $html );
+        if ( $this->action !== null )
+        {
+            $blogEntry->action( $this->action );
+            $this->clearCache( $this->originalUri );
+        }
+        else
+        {
+            $this->displayContent( $blogEntry->getFull() );
+        }
     }
 
     /**
