@@ -24,10 +24,12 @@ enable structuring the scripts in the UI we choose a USENet like naming
 scheme. The topmost defines the type of content, followed by meaningful names.
 The grammar for names:
 
-NAME ::= TYPE '/' MULTIPLE
-TYPE ::= ( org | com | gov | ? )
-MULTIPLE ::= ( SINGLE | SINGLE '/' MULTIPLE )
-SINGLE ::= [a-z]+
+::
+
+	NAME ::= TYPE '/' MULTIPLE
+	TYPE ::= ( org | com | gov | ? )
+	MULTIPLE ::= ( SINGLE | SINGLE '/' MULTIPLE )
+	SINGLE ::= [a-z]+
 
 Example: org/wikipedia/article
 
