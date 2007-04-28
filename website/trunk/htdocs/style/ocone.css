@@ -49,6 +49,15 @@ hr {
 	margin: 5px;
 }
 
+ul {
+	margin: 1px;
+	list-style-type: circle;
+}
+
+blockquote {
+	margin: 0px 0px 0px 20px;
+}
+
 /* Forms */
 
 form {

@@ -71,16 +71,16 @@ class oCone_BlogEntry
 
         $info = pathinfo( $this->file );
         $url = $this->baseUrl . substr( $info['filename'], 1 ) . '.html';
-        $content = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $content );
+        $content['html'] = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $content['html'] );
 
         $comments = $this->comments;
         $svn = new oCone_SvnInfo( $this->file );
 
         return array(
-            'content' => $content,
+            'content' => $content['html'],
             'comments' => $comments,
             'svn' => $svn,
-            'title' => '',
+            'title' => $content['title'],
             'url' => $url,
             'baseUrl' => $this->baseUrl,
         );
@@ -97,7 +97,7 @@ class oCone_BlogEntry
 
         $info = pathinfo( $this->file );
         $url = substr( $this->baseUrl, 0, -1 ) . '.html';
-        $content = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $content );
+        $content['html'] = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $content['html'] );
 
         $comments = array();
         foreach ( $this->comments as $nr => $comment )
@@ -112,10 +112,10 @@ class oCone_BlogEntry
         $baseUrl = $this->baseUrl;
 
         return array(
-            'content' => $content,
+            'content' => $content['html'],
             'comments' => $comments,
             'svn' => $svn,
-            'title' => '',
+            'title' => $content['title'],
             'url' => $url,
             'baseUrl' => $this->baseUrl,
         );

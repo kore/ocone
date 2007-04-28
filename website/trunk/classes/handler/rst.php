@@ -67,7 +67,17 @@ class oCone_RstHandler extends oCone_Handler
         // Hint: Only the \s matches line breaks
         $html = preg_replace( '(.*topic-title.*\s*<ul class="simple">)i', '<ul class="toc">', $html );
 
-        return $html;
+        // Get title
+        $title = false;
+        if ( preg_match( '(<h2\s*>\\s*<a[^>]*>\\s*(.*?)\\s*</a\\s*>\\s*</h2\\s*>)i', $html, $match ) )
+        {
+            $title = $match[1];
+        }
+
+        return array(
+            'title' => $title,
+            'html' => $html,
+        );
     }
 
     /**
@@ -83,7 +93,8 @@ class oCone_RstHandler extends oCone_Handler
                 $this->showLog();
                 break;
             default:
-                $this->displayContent( self::rst2html( $this->uri ) );
+                $content = self::rst2html( $this->uri );
+                $this->displayContent( $content['html'] );
         }
     }
 }
