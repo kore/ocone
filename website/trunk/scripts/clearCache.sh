@@ -1,2 +1,2 @@
 #/bin/bash
-find htdocs/ -name '*.html' -exec rm -vf {} \;
+find htdocs/ '(' -name '*.html' -o -name '*.rss' ')' -exec rm -vf {} \;
