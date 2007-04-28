@@ -217,3 +217,12 @@ ul.comments li p {
 	margin: 2px 0px 15px 0px;
 }
 
+h6.blog_entry_header {
+	margin: 0px;
+	float:right;
+}
+
+h6.blog_entry_footer {
+	margin: 0px;
+}
+

@@ -14,6 +14,8 @@ class oCone_BlogHandler extends oCone_Handler
 
     protected $action;
 
+    protected $output;
+
     public function __construct( $uri )
     {
         $this->limit = (int) oCone_Dispatcher::$configuration->getSetting( 'site', 'blog', 'entries' );
@@ -34,6 +36,18 @@ class oCone_BlogHandler extends oCone_Handler
         $pathinfo = pathinfo( $uri );
         $uri = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
 
+        // Check output type
+        switch ( $ext = strtolower( $pathinfo['extension'] ) )
+        {
+            case 'rss':
+            case 'html':
+                $this->output = $ext;
+                break;
+            default:
+                throw new oCone_NotFoundException( $uri );
+        }
+
+        // Check for blog index page offset
         if ( is_numeric( $pathinfo['filename'] ) )
         {
             $uri = $pathinfo['dirname'];
@@ -91,6 +105,24 @@ class oCone_BlogHandler extends oCone_Handler
     }
 
     /**
+     * Build and return current base url 
+     * 
+     * @access protected
+     * @return string
+     */
+    protected function getBaseUrl()
+    {
+        return str_replace(
+            array(
+                '.html',
+                '.rss',
+            ),
+            '/',
+            $this->originalUri
+        );
+    }
+
+    /**
      * Show index page forblog with latest 10 enries 
      * 
      * @access protected
@@ -98,10 +130,10 @@ class oCone_BlogHandler extends oCone_Handler
      */
     protected function showIndexPage()
     {
-        $content = '';
+        $html = '';
         $entry = 0;
 
-        $baseUrl = str_replace( '.html', '/', $this->originalUri );
+        $baseUrl = $this->getBaseUrl();
 
         $offset = $this->offset;
         foreach ( $this->pages as $page )
@@ -113,7 +145,11 @@ class oCone_BlogHandler extends oCone_Handler
             }
 
             $blogEntry = new oCone_BlogEntry( $page, $baseUrl );
-            $content .= $blogEntry->getReducedEntry();
+            $entry = $blogEntry->getReducedEntry();
+
+            extract( $entry );
+            include OCONE_BASE . 'templates/blog/list_entry.php';
+            $html .= ob_get_clean();
 
             if ( ++$entry >= $this->limit )
             {
@@ -123,7 +159,8 @@ class oCone_BlogHandler extends oCone_Handler
 
         $offset = $this->offset;
         $limit = $this->limit;
-
+        $content = $html;
+        
         ob_start();
         include OCONE_BASE . 'templates/blog/list.php';
 
@@ -137,7 +174,7 @@ class oCone_BlogHandler extends oCone_Handler
      */
     protected function showBlogEntry()
     {
-        $baseUrl = str_replace( '.html', '/', $this->originalUri );
+        $baseUrl = $this->getBaseUrl();
 
         $blogEntry = new oCone_BlogEntry( $this->uri, $baseUrl );
 
@@ -148,8 +185,87 @@ class oCone_BlogHandler extends oCone_Handler
         }
         else
         {
-            $this->displayContent( $blogEntry->getFull() );
+            $entry = $blogEntry->getFull();
+            extract( $entry );
+
+            ob_start();
+            include OCONE_BASE . 'templates/blog/entry.php';
+
+            $this->displayContent( ob_get_clean() );
         }
+    }
+
+    /**
+     * Show feed for blog category
+     * 
+     * @return void
+     */
+    protected function showCategoryFeed()
+    {
+        $feed = new ezcFeed( 'rss2' );
+        $feed->title = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'title' );
+        $feed->link = $blogUrl = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'url' );
+        $feed->description = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'description' );
+        $feed->author = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'author' );
+        
+        $baseUrl = $this->getBaseUrl();
+
+        foreach ( $this->pages as $page )
+        {
+            $blogEntry = new oCone_BlogEntry( $page, $baseUrl );
+            $entry = $blogEntry->getReducedEntry();
+
+            $item = $feed->newItem();
+
+            $item->title = $entry['title'];
+            $item->link = $blogUrl . $entry['url'];
+            $item->description = $entry['content'];
+            $item->author = $entry['svn']->author . '@ocone.org';
+            $item->published = $entry['svn']->date;
+            $item->updated = $entry['svn']->date;
+
+            if ( ++$entry >= $this->limit )
+            {
+                break;
+            }
+        }
+
+        $this->contentType = 'xml';
+        $this->displayContent( $feed->generate() );
+    }
+
+    /**
+     * Show feed for a single blog entry
+     * 
+     * @access protected
+     * @return void
+     */
+    protected function showBlogEntryFeed()
+    {
+        $feed = new ezcFeed( 'rss2' );
+        $feed->title = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'title' );
+        $feed->link = $blogUrl = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'url' );
+        $feed->description = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'description' );
+        $feed->author = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'author' );
+        
+        $baseUrl = $this->getBaseUrl();
+        $blogEntry = new oCone_BlogEntry( $this->uri, $baseUrl );
+        $entry = $blogEntry->getFull();
+
+        foreach ( $entry['comments'] as $comment )
+        {
+            $item = $feed->newItem();
+
+            $item->title = substr( $comment['content'], 0, 20 ) . '...';
+            $item->link = $blogUrl . $entry['url'];
+            $item->description = $comment['content'];
+            $item->author = $comment['author'];
+            $item->published = $comment['date'];
+            $item->updated = $comment['date'];
+        }
+
+        $this->contentType = 'xml';
+        $this->displayContent( $feed->generate() );
     }
 
     /**
@@ -159,13 +275,21 @@ class oCone_BlogHandler extends oCone_Handler
      */
     public function handle()
     {
-        if ( is_dir( $this->uri ) )
+        switch ( true )
         {
-            $this->showIndexPage();
-        }
-        else
-        {
-            $this->showBlogEntry();
+            case is_dir( $this->uri ) && ( $this->output === 'html' ):
+                $this->showIndexPage();
+                break;
+            case is_file( $this->uri ) && ( $this->output === 'html' ):
+                $this->showBlogEntry();
+                break;
+
+            case is_dir( $this->uri ) && ( $this->output === 'rss' ):
+                $this->showCategoryFeed();
+                break;
+            case is_file( $this->uri ) && ( $this->output === 'rss' ):
+                $this->showBlogEntryFeed();
+                break;
         }
     }
 }

@@ -19,6 +19,13 @@ abstract class oCone_Handler
     protected $uri;
 
     /**
+     * Putput content type
+     * 
+     * @var string
+     */
+    protected $contentType = 'html';
+
+    /**
      * Construct handler
      * 
      * @param string $uri 
@@ -72,6 +79,26 @@ abstract class oCone_Handler
     }
 
     /**
+     * Get absolute URL for the current site with defined extension
+     * 
+     * @param string $type 
+     * @return string
+     */
+    protected function getUrl( $type = 'html' )
+    {
+        $info = pathinfo( $this->originalUri );
+
+        if ( $info['dirname'] === '/' )
+        {
+            return '/' . $info['filename'] . '.' . $type;
+        }
+        else
+        {
+            return $info['dirname'] . '/' . $info['filename'] . '.' . $type;
+        }
+    }
+
+    /**
      * Converts an recursive iterator to an multidiumensional array
      * 
      * @param RecursiveIterator $navigation 
@@ -100,6 +127,57 @@ abstract class oCone_Handler
     }
 
     /**
+     * Displays svn log as RSS feed
+     * 
+     * @return void
+     */
+    protected function showLog()
+    {
+        $feed = new ezcFeed( 'rss2' );
+        $feed->title = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'title' );
+        $feed->link = $blogUrl = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'url' );
+        $feed->description = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'description' );
+        $feed->author = oCone_Dispatcher::$configuration->getSetting( 'site', 'general', 'author' );
+ 
+        $svn = new oCone_svnInfo( $this->uri );
+        $url = $this->getUrl();
+
+        foreach ( $svn->log as $entry )
+        {
+            $item = $feed->newItem();
+
+            $item->title = 'Revision ' . $entry['revision'];
+            $item->link = $url;
+            $item->description = nl2br( trim( (string) $entry->msg ) );
+            $item->author = (string) $entry->author . '@ocone.org';
+            $item->published = (string) $entry->date;
+            $item->updated = (string) $entry->date;
+        }
+
+        $this->contentType = 'xml';
+        $this->displayContent( $feed->generate() );
+    }
+
+    /**
+     * Special handler for html content
+     * 
+     * @return string
+     */
+    protected function displayHtmlContent( $content )
+    {
+        $url = $this->originalUri;
+        $site = oCone_Dispatcher::$configuration->getSettings( 'site', 'general', array( 'author', 'title' ) );
+        $navigation = $this->getNavigation();
+        $svn = new oCone_svnInfo( $this->uri );
+
+        $feedUrl = $this->getUrl( 'rss' );
+
+        ob_start();
+        include OCONE_BASE . 'templates/main.php';
+        return ob_get_clean();
+    }
+
+    /**
      * Displays the requested content and creates the cache file for static 
      * content.
      * 
@@ -108,14 +186,17 @@ abstract class oCone_Handler
      */
     protected function displayContent( $content, $static = true )
     {
-        $url = $this->originalUri;
-        $site = oCone_Dispatcher::$configuration->getSettings( 'site', 'general', array( 'author', 'title' ) );
-        $navigation = $this->getNavigation();
-        $svn = new oCone_svnInfo( $this->uri );
-
-        ob_start();
-        include OCONE_BASE . 'templates/main.php';
-        $output = ob_get_clean();
+        switch ( $this->contentType )
+        {
+            case 'html':
+                $output = $this->displayHtmlContent( $content );
+                break;
+            case 'xml':
+                header( 'Content-Type: text/xml' );
+            default:
+                $output = $content;
+                break;
+        }
 
         // Write cache item
         if ( $static && OCONE_CACHE )
@@ -133,6 +214,7 @@ abstract class oCone_Handler
             );
         }
 
+        // Finally output
         echo $output;
     }
 

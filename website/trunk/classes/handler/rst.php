@@ -4,6 +4,8 @@ require_once 'handler.php';
 
 class oCone_RstHandler extends oCone_Handler
 {
+    protected $output;
+
     /**
      * Returns a file name for the requested uri for further use by the 
      * handler.
@@ -16,6 +18,17 @@ class oCone_RstHandler extends oCone_Handler
         // Remove file extension
         $pathinfo = pathinfo( $uri );
         $uri = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
+
+        // Check output type
+        switch ( $ext = strtolower( $pathinfo['extension'] ) )
+        {
+            case 'rss':
+            case 'html':
+                $this->output = $ext;
+                break;
+            default:
+                throw new oCone_NotFoundException( $uri );
+        }
 
         // Find file trying various extensions
         $extensions = array( 'txt', 'rst' );
@@ -64,7 +77,14 @@ class oCone_RstHandler extends oCone_Handler
      */
     public function handle()
     {
-        $this->displayContent( self::rst2html( $this->uri ) );
+        switch ( $this->output )
+        {
+            case 'rss':
+                $this->showLog();
+                break;
+            default:
+                $this->displayContent( self::rst2html( $this->uri ) );
+        }
     }
 }
 

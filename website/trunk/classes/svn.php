@@ -26,6 +26,13 @@ class oCone_svnInfo
     protected $info;
 
     /**
+     * Simplexml document containing svn log
+     * 
+     * @var SimpleXMLDocument
+     */
+    protected $log;
+
+    /**
      * Create svn info object from file
      * 
      * @param string $file 
@@ -36,9 +43,10 @@ class oCone_svnInfo
         $this->file = realpath( $file );
 
         $xml = shell_exec( $cmd = 'svn --xml info ' . escapeshellarg( $this->file ) );
-        $this->info = simplexml_load_string( $xml );
+        $this->info = @simplexml_load_string( $xml );
 
-        // @TDDO: Access to svn log
+        $xml = shell_exec( $cmd = 'svn --xml log ' . escapeshellarg( $this->file ) );
+        $this->log = @simplexml_load_string( $xml );
     }
 
     /**
@@ -57,6 +65,8 @@ class oCone_svnInfo
                 return (int) (string) @$this->info->entry->commit['revision'];
             case 'date':
                 return (int) strtotime( (string) @$this->info->entry->commit->date );
+            case 'log':
+                return $this->log;
         }
     }
 }

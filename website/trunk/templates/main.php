@@ -8,6 +8,7 @@
     <meta name="Author" content="<?php echo htmlentities( $site['author'] ); ?>" />
 	<link rel="Stylesheet" type="text/css" href="/style/ocone.css" media="screen" />
 	<link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="<?php echo htmlentities( $site['title'] ); ?>" href="<?php echo htmlentities( $feedUrl ); ?>" />
 </head>
 <body>
 	<a href="/">

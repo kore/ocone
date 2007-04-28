@@ -32,7 +32,7 @@ class oCone_BlogEntry
 
     public function __construct( $path, $baseUrl = '/' )
     {
-        $this->file = $path;
+        $this->file = realpath( $path );
         $this->baseUrl = $baseUrl;
 
         $this->checkCommentDirectory();
@@ -76,10 +76,14 @@ class oCone_BlogEntry
         $comments = $this->comments;
         $svn = new oCone_SvnInfo( $this->file );
 
-        ob_start();
-        include OCONE_BASE . 'templates/blog/list_entry.php';
-
-        return ob_get_clean();
+        return array(
+            'content' => $content,
+            'comments' => $comments,
+            'svn' => $svn,
+            'title' => '',
+            'url' => $url,
+            'baseUrl' => $this->baseUrl,
+        );
     }
 
     /**
@@ -92,7 +96,7 @@ class oCone_BlogEntry
         $content = oCone_RstHandler::rst2html( $this->file );
 
         $info = pathinfo( $this->file );
-        $url = $this->baseUrl . substr( $info['filename'], 1 ) . '.html';
+        $url = substr( $this->baseUrl, 0, -1 ) . '.html';
         $content = preg_replace( '(<h2>\s*<a )i', '\\0href="' . $url . '" ', $content );
 
         $comments = array();
@@ -107,10 +111,14 @@ class oCone_BlogEntry
         $svn = new oCone_SvnInfo( $this->file );
         $baseUrl = $this->baseUrl;
 
-        ob_start();
-        include OCONE_BASE . 'templates/blog/entry.php';
-
-        return ob_get_clean();
+        return array(
+            'content' => $content,
+            'comments' => $comments,
+            'svn' => $svn,
+            'title' => '',
+            'url' => $url,
+            'baseUrl' => $this->baseUrl,
+        );
     }
 
     /**
@@ -120,7 +128,7 @@ class oCone_BlogEntry
      * @param string $comment 
      * @return boolean
      */
-    protected function checkComment( $user, $comment )
+    protected function isNoSpam( $user, $comment )
     {
         $apiKey = oCone_Dispatcher::$configuration->getSetting( 'site', 'blog', 'akismet_key' );
 
@@ -163,7 +171,7 @@ class oCone_BlogEntry
         switch( strtolower( $action ) )
         {
             case 'postcomment':
-                if ( $this->checkComment( $_POST['name'], $_POST['comment'] ) )
+                if ( $this->isNoSpam( $_POST['name'], $_POST['comment'] ) )
                 {
                     $name = preg_replace( '([^a-z0-9_]+)', '_', $_POST['name'] );
 
