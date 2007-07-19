@@ -1,0 +1,40 @@
+=====
+oCone
+=====
+
+.. image:: logo.png
+   :alt:   oCone logo
+
+The name
+========
+
+The name oCone derivates from "Open Content Network" and shows the goal of
+oCone to build up a network of free and open available content.
+
+The goal
+========
+
+The worlds evolution mainly bases on information, or content. The internet
+shows a fantastic infrastructure to publish content and make it available for
+everyone in the world, but it has some draw backs.
+
+Content is normally published using HTML (or XHTML) which only describes
+visible formats and does not structure the content in a senseful semantical
+way. Even there are a lot of initiatives to change this it will take some time
+to update / transform all content. There are some persons who say that they are 
+a lot of companies and persons who do not even want their content to be really
+readable.
+
+The infrastructure of the internet is pretty stable but the number of users
+and potential hits on a single website caused by famous news sites requires
+expensive infrastructures to serve those. This is something only big 
+institutions or comapanies can afford.
+
+oCone tries to solve this by building a peer to peer network, where each peer
+can grab content from the web (if allowed), transform it into semantic XML and
+offer it to the other peers. In a network each peer will cache the requested
+contents and will reduce the load on the requested sites this way. With enough
+capacity in the peers caches oCone will even be able to mirror complete
+webpages for use in networks not connected with the internet, or serve content
+for websites which are offline during the request.
+

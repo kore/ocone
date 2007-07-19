@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index>
+	<site index="true">
+		<name>Description</name>
+		<path>description.txt</path>
+	</site>
+	<site>
+		<name>General design</name>
+		<path>design.txt</path>
+	</site>
+	<site>
+		<name>Deamon design</name>
+		<path>deamon.txt</path>
+	</site>
+	<site>
+		<name>Script specifications</name>
+		<path>scripts.txt</path>
+	</site>
+	<site>
+		<name>Legitimacy</name>
+		<path>legitimacy.txt</path>
+	</site>
+	<directory>
+		<name>Media files</name>
+		<path>media/</path>
+	</directory>
+
+	<media>
+		<path>communication.png</path>
+	</media>
+	<media>
+		<path>logo.png</path>
+	</media>
+</index>
