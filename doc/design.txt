@@ -124,7 +124,7 @@ interaction to optimally perform on servers and can be up 24/7. Optionally it
 should be possible to configure the deamon using a webinterface or a normal 
 GUI. To reach this goal we get three levels of communication:
 
-.. image:: connections.svg
+.. image:: communication.png
    :alt:   oCone communication structure
 
 1. Peer to peer communication
