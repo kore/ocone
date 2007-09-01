@@ -35,7 +35,7 @@
 	<h1>{wcv_get_config_value( 'title' )}</h1>
 
 	<ul class="head">
-		{raw wcv_list_from_iterator( $tree, 0, 2 )}
+		{raw wcv_list_from_iterator( $tree, 0, 1 )}
 	</ul>
 
 <div id="ocone">
