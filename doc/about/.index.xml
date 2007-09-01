@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index>
+	<site index="true">
+		<name>Description</name>
+		<path>description.txt</path>
+	</site>
+	<site>
+		<name>Legitimacy</name>
+		<path>legitimacy.txt</path>
+	</site>
+
+	<media>
+		<path>logo.png</path>
+	</media>
+</index>
