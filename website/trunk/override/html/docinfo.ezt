@@ -1,0 +1,9 @@
+{use $content}
+<div class="box" id="docinfo">
+{if wcv_metadata_has( $content, 'versioned' )}
+	Revision <strong>{array_count($content->metadata->log)}</strong><br />
+{/if}
+	By <strong>{$content->metadata->author}</strong><br />
+	Updated <strong>{date_format_timestamp( 'r', $content->metadata->mtime )}</strong><br />
+	Licensed under <strong>{$content->metadata->license}</strong><br />
+</div>

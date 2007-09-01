@@ -1,0 +1,12 @@
+IP: 127.0.0.1
+
+exception 'ezcTemplateFileNotFoundException' with message 'The requested template file '/home/kore/devel/ocone/website/trunk/templates/html/download.ezt' does not exist.' in /home/kore/devel/ocone/website/trunk/classes/ezc/Template/src/source_code.php:180
+Stack trace:
+#0 /home/kore/devel/ocone/website/trunk/classes/ezc/Template/src/template.php(324): ezcTemplateSourceCode->load()
+#1 /home/kore/devel/ocone/website/trunk/var/compiled/compiled_templates/xhtml-updqr0/layout-ebf01666cad8fb1dffdf3a377996000a.php(81): ezcTemplate->process('html/download.e...', Object(ezcTemplateConfiguration))
+#2 /home/kore/devel/ocone/website/trunk/classes/ezc/Template/src/compiled_code.php(172): include('/home/kore/deve...')
+#3 /home/kore/devel/ocone/website/trunk/classes/ezc/Template/src/template.php(310): ezcTemplateCompiledCode->execute()
+#4 /home/kore/devel/ocone/website/trunk/classes/display/html.php(41): ezcTemplate->process('/home/kore/deve...')
+#5 /home/kore/devel/ocone/website/trunk/classes/dispatcher.php(212): wcvDisplayHtml->display()
+#6 /home/kore/devel/ocone/website/trunk/htdocs/index.php(9): wcvDispatcher::dispatch('/description.ht...')
+#7 {main}
