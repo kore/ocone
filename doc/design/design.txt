@@ -17,7 +17,7 @@ Peer
   the peer to peer communication mechanism.
 
 Client
-  A client is a application connecting to a ocone deamon / peer requesting
+  A client is a application connecting to a oCone deamon / peer requesting
   data from the network.
 
 Deamon design
@@ -73,15 +73,15 @@ websites.
 Each deamon has a configured amount of diskspace available for cached content.
 A script defines the cache strategies for content, which may be a combination 
 of time to live and directives to handle the content if the website is not
-reachable any more. If the the size of the cached content is bigger then the
+reachable any more. If the size of the cached content is bigger then the
 configured cache size old content will be purged.
 
-On an request the deamon itself will check if he has the content available. If
+On a request the deamon itself will check if he has the content available. If
 this is not the case the deamon will start a breadth-first search on all known
 peers with a limited depth. If the depth limit is reached and no cached
 content could be found the deamon will rerequest the content from the website
-and update its cache. He may notify the previously contacted peers that he has
-the requested content available.
+and update its cache. It may notify the previously contacted peers that it has
+the requested content available now.
 
 Communication
 -------------
@@ -117,14 +117,15 @@ GUI. To reach this goal we get three levels of communication:
 
    Example for this use case:
 
-   A user wants to use his browser request wikipedia contents using the oCone 
-   network. He enters a URL like ocone://en.wikipedia/oCone in the URL bar of
-   his browser. The browser now contacts the local oCone deamon which checks
-   his cache for the requested information and forwards the requests to other
-   peers in the network if the data was not locally available. In the meantime
-   the administrator of the oCone deamon could watch the status of the request
-   using the GUI, or CLI tools. If the browser gets the resulting XML he could
-   display it using a defined set of XSLT and CSS, or just print the raw XML.
+   A user wants to use his browser request wikipedia contents using the oCone
+   network. He enters an URL like ``ocone://en.wikipedia/oCone`` in the address
+   bar of his/her browser. The browser now contacts the local oCone deamon
+   which checks its cache for the requested information and forwards the
+   requests to other peers in the network if the data was not locally
+   available. In the meantime the administrator of the oCone deamon could watch
+   the status of the request using the GUI, or CLI tools. If the browser gets
+   the resulting XML he could display it using a defined set of XSLT and CSS,
+   or just print the raw XML.
 
 The protocol
 ============
@@ -137,19 +138,19 @@ Client protocol
 
 The client protocol should be easy to implement for random clients. Nearly
 each programming language / development environment has abilities to send HTTP
-requests, so that we will use a REST interface for the client to deamon
-communication. To enable this the ocone deamon need to start a HTTP server,
+requests, so that we will use a REST(ful) interface for the client to deamon
+communication. To enable this the oCone deamon needs to start a HTTP server,
 but we of course do not want to use the common port 80, because we do not want
 to enforce the deamon to run as root. The default port the HTTP server will
 run on is port 8023 (yet unassigned), but this should of course be 
 configurable.
 
-The client should understand URLs of the ocone:// scheme, with some special 
+The client should understand URLs of the ``ocone://`` scheme, with some special 
 meanings for the URL parts:
 
  - Server, plus optional port
    
-   Defines the host and port to connect to the ocone deamon.
+   Defines the host and port to connect to the oCone deamon.
 
  - Path
   
@@ -161,7 +162,7 @@ meanings for the URL parts:
    The parameters are a list of optional parameters given for the script
    defining what exactly should be fetched, etc.
 
-The "server" specifies the hostname or IP the ocone deamon runs on, and the
+The "server" specifies the hostname or IP the oCone deamon runs on, and the
 the "port" defaults to the above mentioned 8023, but can be overwritten. The
 "script" defines a unique script name referencing the script to fetch the data
 with optional additional parameters provided to the script.
@@ -192,7 +193,7 @@ scripts result.
 		  }
 	    }
 	  },
-	  element content { empty }
+	  element content { any }
 	  # Content contains the XML from the script response from another
 	  # namespace
     ) | (
@@ -228,7 +229,7 @@ declining the access to the port, prevent the deamon to be contacted from the
 net. Ho do we deal with peers which can access other peers, but are not 
 accessible from the web?
 
-One slution could be to establish permanent connections with a decent amount
+One solution could be to establish permanent connections with a decent amount
 of known peers and only communicate over those established connections. The
 addresses of those impaired peers should not be forwarded to other peers,
 because only the impaired peer itself can establish connections.
@@ -267,10 +268,10 @@ Initial connection points
 -------------------------
 
 When setting up a new deamon for the oCone network the deamon need to know an
-initial set of running peers to be able to receive more peer addresses. We
-need methods of distributnged peer addresses to build up a complete network and
-integrate new clients. There shouldn't be a single point of failure, and this
-way no single peer repository or single initial peer to connect.
+initial set of running peers to be able to receive more peer addresses. We need
+set of working peer addresses to build up a complete network and integrate new
+clients. There shouldn't be a single point of failure, and this way no single
+peer repository or single initial peer to connect.
 
 - Do we want to let the clients report their address to simple servers and
   distribute lists of those peer addresss repositories with the client?
@@ -299,7 +300,7 @@ copying those parts from the official deamon.
    content. This only affects cached contents, because othwerwise the peer
    will fetch the data itself.
    
-   This problem couzld be resolved by comparing the return of multiple peers
+   This problem could be resolved by comparing the return of multiple peers
    by multiple hashs of the content and use the results with the most hits.
    This could of course also be manipulated, but should be nearly impossible
    in big networks, and can be combined with IP / Client blacklist distributed
@@ -343,7 +344,7 @@ End user usage
 
 For most end users XML is not readable by default and needs to be transformed
 into a visually enhanced document description language like XHTML using CSS,
-or PDF. The ocone deamon itself will not deliver such formats, because its
+or PDF. The oCone deamon itself will not deliver such formats, because its
 basic usage is to transform, cache and deliver semantic XML, so that the
 output transformation should be done in the clients. A useful language for
 this could be XSLT, because it could be interpreted by most browsers and has
@@ -354,8 +355,8 @@ Browser extension
 
 The browsers of the Mozilla Foundation (Firefox, Mozilla) are XUL based and
 allow easy extension of their core functionality by XUL based browser plugins.
-It should be pretty easy to write an extension handling ocone:// URLs and use
-a set of predefined or fetched XSLTs to display them in the browser window.
+It should be pretty easy to write an extension handling ``ocone://`` URLs and
+use a set of predefined or fetched XSLTs to display them in the browser window.
 
 Standalone client
 -----------------
