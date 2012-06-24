@@ -1,0 +1,40 @@
+===================
+Legatimacy of oCone
+===================
+
+The issue
+=========
+
+The software itself will of course not be illegal, by using only open source
+libraries and ensuring clean IP of the code. But some local authorities
+consider software only (or mostly) used for illegal actions as illegal. It
+will be simple to violate copyright laws using oCone clients by offering 
+website content without authorization of the copyright owner. By the design of
+oCone it will be impossible to ban such requests.
+
+Legal use
+=========
+
+oCone is build to provide load balancing for freely available content by peer
+to peer caching. HTTP is designed to be cached, so this is nothing uncommon.
+The restructured data will reference the contents license and the original
+author and only offer another channel for the content to be transferred.
+
+Growing projects like wikipedia suffer from high load and look for
+distribution methods, which do not require expensive server setups. oCone is
+designed to help here.
+
+Preventing from illegal use
+===========================
+
+The scripting engine used to fetch content is turing complete, so that it will
+be impossible to limit the use of oCone to a subset of functions allowed by
+the copyright in a special country.
+
+oCone will offer whitelist of scripts which tries to respect a reasonable set 
+of common copyright laws. oCone can not prevent users from loading other
+whitelistis distributed over random channels in the internet containing scripts
+violating copyright laws. Defined filters could easily be modified in an open
+source sofware, so that it would make no sense to implement them in the first
+place.
+

@@ -1,0 +1,369 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>oCone design document &mdash; oCone 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="oCone 0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">oCone 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="ocone-design-document">
+<h1><a class="toc-backref" href="#id3">oCone design document</a><a class="headerlink" href="#ocone-design-document" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#ocone-design-document" id="id3">oCone design document</a><ul>
+<li><a class="reference internal" href="#used-terms" id="id4">Used terms</a></li>
+<li><a class="reference internal" href="#deamon-design" id="id5">Deamon design</a></li>
+<li><a class="reference internal" href="#the-protocol" id="id6">The protocol</a></li>
+<li><a class="reference internal" href="#caching-strategy" id="id7">Caching strategy</a></li>
+<li><a class="reference internal" href="#technical-problems-open-questions" id="id8">Technical problems / Open questions</a></li>
+<li><a class="reference internal" href="#end-user-usage" id="id9">End user usage</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="used-terms">
+<h2><a class="toc-backref" href="#id4">Used terms</a><a class="headerlink" href="#used-terms" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Deamon</dt>
+<dd>A deamon is a peer in the oCone network normally running in background for a
+user.</dd>
+<dt>Peer</dt>
+<dd>Other name for the deamons in the network used when it comes to aspects of
+the peer to peer communication mechanism.</dd>
+<dt>Client</dt>
+<dd>A client is a application connecting to a oCone deamon / peer requesting
+data from the network.</dd>
+</dl>
+</div>
+<div class="section" id="deamon-design">
+<h2><a class="toc-backref" href="#id5">Deamon design</a><a class="headerlink" href="#deamon-design" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="transforming-content">
+<h3>Transforming content<a class="headerlink" href="#transforming-content" title="Permalink to this headline">¶</a></h3>
+<p>To grab and transform content from webpages we need a turing complete language
+to transform (X)HTML, PDF, Text and other formats to semantic XML. As a bonus
+the language should have good, build in, capabilities to work with XML.</p>
+<p>In theory the deamon could serve a lot of language bindings for this task, but
+the scripts need to be spread between the peers, so that we should
+concentrate on one tested language. Executing foreign scripts in your personal
+environment may result in security risks if the language is not known for good
+sandboxing of the scripts.</p>
+<p>ECMAScripts (some may only know the JavaScript implementations) has proven
+good in all of the above points and there are a lot of open source language
+bindings for ECMAScript interpretors. The default language for transformation
+scripts will be ECMAScript.</p>
+</div>
+<div class="section" id="authorizing-scripts">
+<h3>Authorizing scripts<a class="headerlink" href="#authorizing-scripts" title="Permalink to this headline">¶</a></h3>
+<p>When scripts are distributed through a peer to peer network a user has to
+trust the locally executed scripts beyond the sandbox. Users mistrust may be
+caused by political incorrect contents, or scripts abusing the power given by
+a peer to peer network.</p>
+<p>To ensure that all users who request contents are also contributing to the
+network, users may only request data from scripts which they allow to be
+executed locally.</p>
+<p>A user should be able to have fine grained control over the local scripts, so
+that he should have several options for each script:
+- Allow execution
+- Allow caching of aggregated contents
+- Allow forwarding of requests</p>
+<p>Not every user wants to perform such fine grained control over possible
+scripts, so that there should be common lists of &#8220;good&#8221; scripts to help users
+configuring their deamon.</p>
+</div>
+<div class="section" id="content-caching">
+<h3>Content caching<a class="headerlink" href="#content-caching" title="Permalink to this headline">¶</a></h3>
+<p>Caching of requested content is viable for the network to work. If contents
+would not be cached a grown network could cause DOS attacks on bad performing
+websites.</p>
+<p>Each deamon has a configured amount of diskspace available for cached content.
+A script defines the cache strategies for content, which may be a combination
+of time to live and directives to handle the content if the website is not
+reachable any more. If the size of the cached content is bigger then the
+configured cache size old content will be purged.</p>
+<p>On a request the deamon itself will check if he has the content available. If
+this is not the case the deamon will start a breadth-first search on all known
+peers with a limited depth. If the depth limit is reached and no cached
+content could be found the deamon will rerequest the content from the website
+and update its cache. It may notify the previously contacted peers that it has
+the requested content available now.</p>
+</div>
+<div class="section" id="communication">
+<h3>Communication<a class="headerlink" href="#communication" title="Permalink to this headline">¶</a></h3>
+<p>The deamon should be able to run as a background process with no user
+interaction to optimally perform on servers and can be up 24/7. Optionally it
+should be possible to configure the deamon using a webinterface or a normal
+GUI. To reach this goal we get three levels of communication:</p>
+<img alt="oCone communication structure" src="../_images/communication.png" />
+<ol class="arabic">
+<li><p class="first">Peer to peer communication</p>
+<p>This communication level describes the interaction of different oCone
+peers for interchaning data, sending cache requests and sharing scripts.
+The protocol itself is described in the section <a href="#id1"><span class="problematic" id="id2">`Peer to peer protocol`__</span></a>.</p>
+</li>
+<li><p class="first">GUI communication</p>
+<p>The GUI needs access to the oCone deamons data to display the clients
+status and to configure the deamon.</p>
+<p>Presumeably we do not need to describe another network protocol here but
+can interact using a local command line interface. The output of the CLI
+programs need of course be parseable (perhaps optionally XML) and offer
+access to all features of the deamon.</p>
+</li>
+<li><p class="first">Deamon &lt;-&gt; client communication</p>
+<p>The clients are not oCone deamon in this diagram, but random programs
+using the oCone network and caching abilities to request content.</p>
+<p>Example for this use case:</p>
+<p>A user wants to use his browser request wikipedia contents using the oCone
+network. He enters an URL like <tt class="docutils literal"><span class="pre">ocone://en.wikipedia/oCone</span></tt> in the address
+bar of his/her browser. The browser now contacts the local oCone deamon
+which checks its cache for the requested information and forwards the
+requests to other peers in the network if the data was not locally
+available. In the meantime the administrator of the oCone deamon could watch
+the status of the request using the GUI, or CLI tools. If the browser gets
+the resulting XML he could display it using a defined set of XSLT and CSS,
+or just print the raw XML.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="the-protocol">
+<h2><a class="toc-backref" href="#id6">The protocol</a><a class="headerlink" href="#the-protocol" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="peer-to-peer-protocol">
+<h3>Peer to peer protocol<a class="headerlink" href="#peer-to-peer-protocol" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="client-protocol">
+<h3>Client protocol<a class="headerlink" href="#client-protocol" title="Permalink to this headline">¶</a></h3>
+<p>The client protocol should be easy to implement for random clients. Nearly
+each programming language / development environment has abilities to send HTTP
+requests, so that we will use a REST(ful) interface for the client to deamon
+communication. To enable this the oCone deamon needs to start a HTTP server,
+but we of course do not want to use the common port 80, because we do not want
+to enforce the deamon to run as root. The default port the HTTP server will
+run on is port 8023 (yet unassigned), but this should of course be
+configurable.</p>
+<p>The client should understand URLs of the <tt class="docutils literal"><span class="pre">ocone://</span></tt> scheme, with some special
+meanings for the URL parts:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Server, plus optional port</p>
+<p>Defines the host and port to connect to the oCone deamon.</p>
+</li>
+<li><p class="first">Path</p>
+<p>The path uniquely identifies the script as proposed in the scripts
+document.</p>
+</li>
+<li><p class="first">Parameters</p>
+<p>The parameters are a list of optional parameters given for the script
+defining what exactly should be fetched, etc.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>The &#8220;server&#8221; specifies the hostname or IP the oCone deamon runs on, and the
+the &#8220;port&#8221; defaults to the above mentioned 8023, but can be overwritten. The
+&#8220;script&#8221; defines a unique script name referencing the script to fetch the data
+with optional additional parameters provided to the script.</p>
+<p>The server simply returns a XML document, either containing a error, or the
+result of the script. The following RelaxNG defines the structure of the
+scripts result.</p>
+<p>The content element defines a new default namespace for its childs which
+contain the actual content generated by the script.</p>
+</div>
+</div>
+<div class="section" id="caching-strategy">
+<h2><a class="toc-backref" href="#id7">Caching strategy</a><a class="headerlink" href="#caching-strategy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cache-options">
+<h3>Cache options<a class="headerlink" href="#cache-options" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="cache-purging-overwriting-algorithm">
+<h3>Cache purging / overwriting algorithm<a class="headerlink" href="#cache-purging-overwriting-algorithm" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="technical-problems-open-questions">
+<h2><a class="toc-backref" href="#id8">Technical problems / Open questions</a><a class="headerlink" href="#technical-problems-open-questions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nat-firewalls">
+<h3>NAT &amp; Firewalls<a class="headerlink" href="#nat-firewalls" title="Permalink to this headline">¶</a></h3>
+<p>Using IPv4, NAT is a quite usual setup for a lot of deamons. NAT without
+forwarding the right ports to the IP the deamon runs on, or firewall rules
+declining the access to the port, prevent the deamon to be contacted from the
+net. Ho do we deal with peers which can access other peers, but are not
+accessible from the web?</p>
+<p>One solution could be to establish permanent connections with a decent amount
+of known peers and only communicate over those established connections. The
+addresses of those impaired peers should not be forwarded to other peers,
+because only the impaired peer itself can establish connections.</p>
+</div>
+<div class="section" id="script-distribution-script-versioning">
+<h3>Script distribution &amp; script versioning<a class="headerlink" href="#script-distribution-script-versioning" title="Permalink to this headline">¶</a></h3>
+<p>We need to share scripts through the peer to peer network with user
+notification to authorize new scripts, or new script versions. On the other
+hand we want to provide script white lists to make it easier for user to allow
+groups of well known scripts to be executed in his local environment. Those
+script lists could include the scripts, so that they should not need to be
+shared through the network, but are directly included.</p>
+</div>
+<div class="section" id="binary-content">
+<h3>Binary content<a class="headerlink" href="#binary-content" title="Permalink to this headline">¶</a></h3>
+<p>oCone is designed to transform and transfer content described using XML and
+no binary content. Binary content can always be embedded in XML using PC-Data
+sections or <a class="reference external" href="data://">data://</a> URLs. Embedding binary content will increase the required
+cache sizes and use far more bandwidth and could hardly be described using a
+markup language.</p>
+<ul class="simple">
+<li>Should we allow data URLs?</li>
+<li>If not, what will we do with the large available structered sets of binary
+data like <a class="reference external" href="http://commons.wikimedia.org">http://commons.wikimedia.org</a>? Those are sometimes relevant
+contents in wikipedia articles and should somehow be included in displayed
+articles.</li>
+</ul>
+<p>Conclusion:
+- We allow data URLs but ask the user to use them as seldom as possible. It</p>
+<blockquote>
+<div>would be a major drawback and impossible to block reliably binary content
+with valid information in articles.</div></blockquote>
+</div>
+<div class="section" id="initial-connection-points">
+<h3>Initial connection points<a class="headerlink" href="#initial-connection-points" title="Permalink to this headline">¶</a></h3>
+<p>When setting up a new deamon for the oCone network the deamon need to know an
+initial set of running peers to be able to receive more peer addresses. We need
+set of working peer addresses to build up a complete network and integrate new
+clients. There shouldn&#8217;t be a single point of failure, and this way no single
+peer repository or single initial peer to connect.</p>
+<ul class="simple">
+<li>Do we want to let the clients report their address to simple servers and
+distribute lists of those peer addresss repositories with the client?</li>
+<li>Do we just want to distribute a list of some &#8220;always&#8221; running oCone peers
+and only ensure peer address distribution using the oCone network?</li>
+</ul>
+<p>The list should of course be customizeable to allow builing private oCone
+networks.</p>
+</div>
+<div class="section" id="evil-deamons">
+<h3>Evil deamons<a class="headerlink" href="#evil-deamons" title="Permalink to this headline">¶</a></h3>
+<p>Since the protocol is documented and the (default) deamon will be open source
+it is easy to write your own deamon using the protocol and try abusing the
+network. This sections should list possible attacks and strategies to act
+against them.</p>
+<p>As no deamon needs to authentificate there is no way to identify a deamon.
+Everything, like version string, signed messages, etc. could be faked by just
+copying those parts from the official deamon.</p>
+<ol class="arabic">
+<li><p class="first">Injecting spam, or other broken content</p>
+<p>A peer could pretend to have content cached and serve completely
+different content instead. This could either be spam, or just plain wrong
+content. This only affects cached contents, because othwerwise the peer
+will fetch the data itself.</p>
+<p>This problem could be resolved by comparing the return of multiple peers
+by multiple hashs of the content and use the results with the most hits.
+This could of course also be manipulated, but should be nearly impossible
+in big networks, and can be combined with IP / Client blacklist distributed
+by common servers.</p>
+<p>Without an authorized peer it is impossible to really verify a script
+response as correct.</p>
+</li>
+<li><p class="first">Serving malicious scripts</p>
+<p>Malicious scripts can be detected by storing several hash sums for the
+script in the whitelist and comparing the script against those hashes.</p>
+</li>
+<li><p class="first">Exceeding peers memory with too many requests</p>
+<p>Each peer has a queue with the requests by other peers he wants to
+serve. This queue could be exceeded and consume a lot of open connections
+and memory by high amounts of requests. If the queue of a peer exceeds a
+certain limit the peer could response with messages indicating that it is
+currectly unavailable for more requests.</p>
+<p>To prevent from peers always sending service unavailable messages, the
+other peers could store ratings for their peers, and send requests to
+those peers more seldom and schedule their requests with a lower
+priority. This should also help balancing the requests in the network.</p>
+</li>
+<li><p class="first">Only requesting, but no caching / fetching / forwarding</p>
+<p>The default deamon will ensure, that the user can only request contents
+from scripts he offers caching, fetching and forwarding for. A custom
+deamon could of course bypass this.</p>
+<p>The only way to detect such misbehaviour is gathering statistics for every
+known peer and reduce the peers schedule priority on bad behaviour. There
+is no way to proof detect some peers misbehaviour. In a big enough
+network the count of those misshapen peers should always be low enough to
+be safely ignored.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="end-user-usage">
+<h2><a class="toc-backref" href="#id9">End user usage</a><a class="headerlink" href="#end-user-usage" title="Permalink to this headline">¶</a></h2>
+<p>For most end users XML is not readable by default and needs to be transformed
+into a visually enhanced document description language like XHTML using CSS,
+or PDF. The oCone deamon itself will not deliver such formats, because its
+basic usage is to transform, cache and deliver semantic XML, so that the
+output transformation should be done in the clients. A useful language for
+this could be XSLT, because it could be interpreted by most browsers and has
+bindings for nearly each language.</p>
+<div class="section" id="browser-extension">
+<h3>Browser extension<a class="headerlink" href="#browser-extension" title="Permalink to this headline">¶</a></h3>
+<p>The browsers of the Mozilla Foundation (Firefox, Mozilla) are XUL based and
+allow easy extension of their core functionality by XUL based browser plugins.
+It should be pretty easy to write an extension handling <tt class="docutils literal"><span class="pre">ocone://</span></tt> URLs and
+use a set of predefined or fetched XSLTs to display them in the browser window.</p>
+</div>
+<div class="section" id="standalone-client">
+<h3>Standalone client<a class="headerlink" href="#standalone-client" title="Permalink to this headline">¶</a></h3>
+<p>Using the mozilla XUL runner we could create a OS independent standalone
+client reusing the above mentioned browser extension with full support for
+browsing oCone.</p>
+</div>
+<div class="section" id="php-libraries">
+<h3>PHP libraries<a class="headerlink" href="#php-libraries" title="Permalink to this headline">¶</a></h3>
+<p>As an example for other language an implementation of a client in PHP should
+be very simple and would make the data fetched by oCone deamons reusable in
+web applications.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">oCone 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,1 +1,128 @@
-Dummy
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>oCone &mdash; oCone 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="oCone 0.1 documentation" href="#" />
+    <link rel="next" title="Legatimacy of oCone" href="about/legitimacy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="about/legitimacy.html" title="Legatimacy of oCone"
+             accesskey="N">next</a></li>
+        <li><a href="#">oCone 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body">
+            
+  <div class="section" id="ocone">
+<h1>oCone<a class="headerlink" href="#ocone" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about/legitimacy.html">Legatimacy of oCone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about/legitimacy.html#the-issue">The issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/legitimacy.html#legal-use">Legal use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/legitimacy.html#preventing-from-illegal-use">Preventing from illegal use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="design/deamon.html">Design of oCone deamon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design/deamon.html#main-threads">Main threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/deamon.html#interthread-communication">Interthread communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/deamon.html#datastructures-in-threads">Datastructures in threads</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="design/design.html">oCone design document</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#used-terms">Used terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#deamon-design">Deamon design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#the-protocol">The protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#caching-strategy">Caching strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#technical-problems-open-questions">Technical problems / Open questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/design.html#end-user-usage">End user usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="design/scripts.html">oCone script specifications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design/scripts.html#the-scripts">The scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/scripts.html#definition-document">Definition document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/scripts.html#naming-scheme">Naming scheme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design/scripts.html#script-context">Script context</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<img alt="oCone logo" src="_images/logo.png" />
+<div class="section" id="the-name">
+<h2>The name<a class="headerlink" href="#the-name" title="Permalink to this headline">¶</a></h2>
+<p>The name oCone derivates from &#8220;Open Content Network&#8221; and shows the goal of
+oCone to build up a network of free and open available content.</p>
+</div>
+<div class="section" id="the-goal">
+<h2>The goal<a class="headerlink" href="#the-goal" title="Permalink to this headline">¶</a></h2>
+<p>The worlds evolution mainly bases on information, or content. The internet
+shows a fantastic infrastructure to publish content and make it available for
+everyone in the world, but it has some draw backs.</p>
+<p>Content is normally published using HTML (or XHTML) which only describes
+visible formats and does not structure the content in a sensible semantical
+way. Even there are a lot of initiatives to change this it will take some time
+to update / transform all content. There are some persons who say that they are
+a lot of companies and persons who do not even want their content to be really
+readable.</p>
+<p>The infrastructure of the internet is pretty stable but the number of users
+and potential hits on a single website caused by famous news sites requires
+expensive infrastructures to serve those. This is something only big
+institutions or comapanies can afford.</p>
+<p>oCone tries to solve this by building a peer to peer network, where each peer
+can grab content from the web (if allowed), transform it into semantic XML and
+offer it to the other peers. In a network each peer will cache the requested
+contents and will reduce the load on the requested sites this way. With enough
+capacity in the peers caches oCone will even be able to mirror complete
+webpages for use in networks not connected with the internet, or serve content
+for websites which are offline during the request.</p>
+</div>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="about/legitimacy.html" title="Legatimacy of oCone"
+             >next</a></li>
+        <li><a href="#">oCone 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
