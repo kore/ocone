@@ -1,1 +1,1 @@
-src/site/rst/about/description.txt
+src/site/rst/index.txt
