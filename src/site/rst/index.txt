@@ -10,9 +10,6 @@ oCone
    design/design.txt
    design/scripts.txt
 
-.. image:: logo.png
-   :alt:   oCone logo
-
 The name
 ========
 
