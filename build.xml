@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="oCone" basedir=".">
+
+    <!--
+        Import project specific settings
+    -->
+    <property file="build.properties" />
+
+    <!--
+        Import the build commons framework
+    -->
+    <import file="setup/src/main/xml/base.xml" />
+
+    <target name="site-html">
+        <exec executable="sphinx-build">
+            <arg value="${basedir}/src/site/rst/"/>
+            <arg value="${basedir}/src/site/html/"/>
+        </exec>
+    </target>
+
+</project>
