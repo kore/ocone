@@ -171,7 +171,8 @@ The server simply returns a XML document, either containing a error, or the
 result of the script. The following RelaxNG defines the structure of the
 scripts result.
 
-..
+::
+
   element ocone {
     (
 	  element header {
