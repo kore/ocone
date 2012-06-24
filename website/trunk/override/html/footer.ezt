@@ -1,4 +1,0 @@
-{use $content}
-<div class="footer">
-	{$content->metadata->license} by {$content->metadata->author}
-</div>
