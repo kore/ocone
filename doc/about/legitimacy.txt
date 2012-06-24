@@ -15,10 +15,10 @@ oCone it will be impossible to ban such requests.
 Legal use
 =========
 
-oCone is build to provide load balancing for free available content by peer to
-peer caching. The restructured data will reference the contents license and
-the original author and only offer another channel for the content to be
-transferred.
+oCone is build to provide load balancing for freely available content by peer
+to peer caching. HTTP is designed to be cached, so this is nothing uncommon.
+The restructured data will reference the contents license and the original
+author and only offer another channel for the content to be transferred.
 
 Growing projects like wikipedia suffer from high load and look for
 distribution methods, which do not require expensive server setups. oCone is
