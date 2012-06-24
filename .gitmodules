@@ -1,3 +1,6 @@
 [submodule "setup"]
 	path = setup
 	url = git://github.com/Qafoo/build-commons.git
+[submodule "src/site/html"]
+	path = src/site/html
+	url = git@github.com:kore/ocone.git
