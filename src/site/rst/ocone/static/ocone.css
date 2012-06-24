@@ -1,0 +1,42 @@
+@import "basic.css";
+@import "bootstrap.min.css";
+
+.related {
+    background-color: #efefef;
+    padding: 2px 0px 5px 0px;
+}
+
+div.related > ul,
+.body {
+    max-width: 900px;
+    margin: 0px auto;
+}
+
+h1 {
+    background-image: url( "logo.png" );
+    background-repeat: no-repeat;
+
+    height: 100px;
+    padding: 40px 10px 0px 120px;
+
+    clear: both;
+}
+
+.body > .section > .contents,
+.body > .section > .toctree-wrapper {
+    width: 29%;
+    float: left;
+    border: none;
+}
+
+.body > .section > .section {
+    width: 69%;
+    float: right;
+}
+
+.footer {
+    clear: both;
+    padding: 5px 5px 15px 5px;
+    text-align: center;
+}
+
