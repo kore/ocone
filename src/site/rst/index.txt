@@ -43,3 +43,9 @@ capacity in the peers caches oCone will even be able to mirror complete
 webpages for use in networks not connected with the internet, or serve content
 for websites which are offline during the request.
 
+The Source
+==========
+
+Currently only design documents describing the idea are available. Evrything is
+available at: https://github.com/kore/ocone
+
