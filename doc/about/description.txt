@@ -19,7 +19,7 @@ shows a fantastic infrastructure to publish content and make it available for
 everyone in the world, but it has some draw backs.
 
 Content is normally published using HTML (or XHTML) which only describes
-visible formats and does not structure the content in a senseful semantical
+visible formats and does not structure the content in a sensible semantical
 way. Even there are a lot of initiatives to change this it will take some time
 to update / transform all content. There are some persons who say that they are 
 a lot of companies and persons who do not even want their content to be really
