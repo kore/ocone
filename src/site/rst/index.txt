@@ -2,6 +2,14 @@
 oCone
 =====
 
+.. toctree::
+   :maxdepth: 2
+
+   about/legitimacy.txt
+   design/deamon.txt
+   design/design.txt
+   design/scripts.txt
+
 .. image:: logo.png
    :alt:   oCone logo
 
